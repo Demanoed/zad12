@@ -14,7 +14,6 @@ namespace SortMas
         private static int rndPer = 0, vozPer = 0, ubvPer = 0;
         private static Random rnd = new Random();
         private static bool sort = false;
-        private static Tree idTree = null;
         private static int Menu()
         {
             ColorMess.Yellow("\n Выберите пункт меню");
@@ -30,7 +29,7 @@ namespace SortMas
             Console.Clear();
             ColorMess.Yellow("\n Выберите пункт меню");
             ColorMess.Cyan("\n\n 1) Сортировка слиянием" +
-                        "\n\n 2) Сортировка с помощью двоичного дерева" +
+                        "\n\n 2) Блочная сортировка" +
                         "\n\n 3) Назад");
             ColorMess.Green("\n\n Цифра: ");
             return Input.Check(1, 3);
@@ -147,6 +146,55 @@ namespace SortMas
             vozMas = MergeSort(vozMas, ref vozSrv, ref vozPer);
             ubvMas = MergeSort(ubvMas, ref ubvSrv, ref ubvPer);
         }
+        private static void BucketSort(double[] a, ref int sravnenie, ref int perestonovka)
+        {
+            List<double>[] aux = new List<double>[a.Length];
+            for (int i = 0; i < aux.Length; ++i)
+                aux[i] = new List<double>();
+            double minValue = a[0];
+            double maxValue = a[0];
+            for (int i = 1; i < a.Length; ++i)
+            {
+                if (a[i] < minValue)
+                {
+                    minValue = a[i];
+                    sravnenie++;
+                }
+                else if (a[i] > maxValue)
+                {
+                    maxValue = a[i];
+                    sravnenie++;
+                }
+            }
+            double numRange = maxValue - minValue;
+            for (int i = 0; i < a.Length; ++i)
+            {
+                int bcktIdx = (int)Math.Floor((a[i] - minValue) / numRange * (aux.Length - 1));
+                aux[bcktIdx].Add(a[i]);
+                perestonovka++;
+            }
+            for (int i = 0; i < aux.Length; ++i)
+            {
+                aux[i].Sort();
+                sravnenie++;
+                perestonovka++;
+            }
+            int idx = 0;
+            for (int i = 0; i < aux.Length; ++i)
+            {
+                for (int j = 0; j < aux[i].Count; ++j)
+                {
+                    a[idx++] = aux[i][j];
+                    perestonovka++;
+                }
+            }
+        }
+        private static void ForBucketSort()
+        {
+            BucketSort(rndMas, ref rndSrv, ref rndPer);
+            BucketSort(vozMas, ref vozSrv, ref vozPer);
+            BucketSort(ubvMas, ref ubvSrv, ref ubvPer);
+        }
         static void Main()
         {
             bool ok = false;
@@ -186,7 +234,7 @@ namespace SortMas
                                     ForMergeSort();
                                     break;
                                 case 2:
-                                    //ForTreeSort();
+                                    ForBucketSort();
                                     break;
                                 case 3:
                                     sort = false;
