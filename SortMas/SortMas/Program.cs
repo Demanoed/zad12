@@ -9,11 +9,20 @@ namespace SortMas
 {
     class Program
     {
+        #region три вида массива
         private static double[] rndMas, vozMas, ubvMas;
+        #endregion
+        #region счетчики для сравнений и перестановок
         private static int rndSrv = 0, vozSrv = 0, ubvSrv = 0;
         private static int rndPer = 0, vozPer = 0, ubvPer = 0;
+        #endregion
+        #region Переменная для рандома
         private static Random rnd = new Random();
+        #endregion
+        #region Переменная для проверки сортированности
         private static bool sort = false;
+        #endregion
+        #region Печатает меню
         private static int Menu()
         {
             ColorMess.Yellow("\n Выберите пункт меню");
@@ -24,6 +33,8 @@ namespace SortMas
             ColorMess.Green("\n\n Цифра: ");
             return Input.Check(1, 4);
         }
+        #endregion
+        #region Меню для выбора метода сортировки
         private static int ChooseSort()
         {
             Console.Clear();
@@ -34,6 +45,8 @@ namespace SortMas
             ColorMess.Green("\n\n Цифра: ");
             return Input.Check(1, 3);
         }
+        #endregion
+        #region Создает массив
         private static bool CreateMas()
         {
             Console.Clear();
@@ -66,6 +79,8 @@ namespace SortMas
             Array.Reverse(ubvMas);
             return true;
         }
+        #endregion
+        #region Печатает массив
         private static void PrintMas()
         {
             Console.Clear();
@@ -100,6 +115,8 @@ namespace SortMas
                 ColorMess.Yellow("\n Колличество сравнений: " + ubvSrv + ", Колличество перестановок: " + ubvPer + "\n");
             }
         }
+        #endregion
+        #region Проверяет на кол-во элементов в массиве и вызывает метод сортировки слиянием
         private static double[] MergeSort(double[] massive, ref int sravnenie, ref int perestonovka)
         {
             if (massive.Length == 1)
@@ -107,6 +124,8 @@ namespace SortMas
             int mid_point = massive.Length / 2;
             return Merge(MergeSort(massive.Take(mid_point).ToArray(), ref sravnenie, ref perestonovka), MergeSort(massive.Skip(mid_point).ToArray(), ref sravnenie, ref perestonovka), ref sravnenie, ref perestonovka);
         }
+        #endregion
+        #region Метод сортировки слиянием
         private static double[] Merge(double[] mass1, double[] mass2, ref int sravnenie, ref int perestonovka)
         {
             int a = 0, b = 0;
@@ -140,12 +159,16 @@ namespace SortMas
             }
             return merged;
         }
+        #endregion
+        #region Сортировка трех типов массива при помощи метода слияния
         private static void ForMergeSort()
         {
             rndMas = MergeSort(rndMas, ref rndSrv, ref rndPer);
             vozMas = MergeSort(vozMas, ref vozSrv, ref vozPer);
             ubvMas = MergeSort(ubvMas, ref ubvSrv, ref ubvPer);
         }
+        #endregion
+        #region Метод блочной сортировки
         private static void BucketSort(double[] a, ref int sravnenie, ref int perestonovka)
         {
             List<double>[] aux = new List<double>[a.Length];
@@ -189,12 +212,16 @@ namespace SortMas
                 }
             }
         }
+        #endregion
+        #region Сортировка трех типов массива при помощи метода блочной сортировки
         private static void ForBucketSort()
         {
             BucketSort(rndMas, ref rndSrv, ref rndPer);
             BucketSort(vozMas, ref vozSrv, ref vozPer);
             BucketSort(ubvMas, ref ubvSrv, ref ubvPer);
         }
+        #endregion
+        #region Запрашивает у пользователя данные, печатает меню с выбором операции, выводит результат обработки
         static void Main()
         {
             bool ok = false;
@@ -268,5 +295,6 @@ namespace SortMas
                     break;
             }
         }
+        #endregion
     }
 }
